@@ -480,6 +480,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7324a4da5bb7f394ba7995a5a9919880, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1205234564}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7324a4da5bb7f394ba7995a5a9919880, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1205234571}
   m_SourcePrefab: {fileID: 100100000, guid: 7324a4da5bb7f394ba7995a5a9919880, type: 3}
 --- !u!1 &1205234563 stripped
 GameObject:
@@ -541,7 +544,25 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.97, z: 0}
+  m_Center: {x: 0, y: 0.94, z: 0}
+--- !u!114 &1205234571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205234563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aef0511422a0a784391f6c0aff5225c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  groundedPlayer: 0
+  moveSpeed: 5
+  jumpHeight: 2
+  gravity: -9.81
+  rotationSpeed: 500
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
