@@ -25,6 +25,10 @@ public class PlayerMovement : MonoBehaviour
     //Rotation
     float targetRotation = 0f;
     [SerializeField] float rotationSpeed = 200f;
+
+    //Camera Rotation
+    Transform CameraTransform;
+    [SerializeField] float CamRotationSpeed = 5f;
     
 
     private void Awake()
@@ -34,6 +38,8 @@ public class PlayerMovement : MonoBehaviour
 
         moveAction = playerInput.actions["Move"];
         jumpaction = playerInput.actions["Jump"];
+
+        CameraTransform = Camera.main.transform;
 
     }
 
@@ -52,10 +58,18 @@ public class PlayerMovement : MonoBehaviour
         //Movement
         Vector2 input = moveAction.ReadValue<Vector2>();
          Vector3 move = new Vector3(input.x, 0, input.y);
+
+        //Camera rotate towards the player rotation
+        move = move.x * CameraTransform.right.normalized + move.z * CameraTransform.forward.normalized;
+        move.y = 0f;
          controller.Move(move * Time.deltaTime * moveSpeed);
 
-       // RotateCharacter(input);
-       // MoveCharacter(input);
+        // Smoothly rotate to the target rotation
+        Quaternion targetRotationQuaternion = Quaternion.Euler(0, CameraTransform.eulerAngles.y, 0);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotationQuaternion, CamRotationSpeed * Time.deltaTime);
+
+        // RotateCharacter(input);
+        // MoveCharacter(input);
 
         //Jump
         if (jumpaction.phase == InputActionPhase.Performed && groundedPlayer)
