@@ -51,11 +51,11 @@ public class PlayerMovement : MonoBehaviour
 
         //Movement
         Vector2 input = moveAction.ReadValue<Vector2>();
-        // Vector3 move = new Vector3(0, 0, input.y);
-        // controller.Move(move * Time.deltaTime * moveSpeed);
+         Vector3 move = new Vector3(input.x, 0, input.y);
+         controller.Move(move * Time.deltaTime * moveSpeed);
 
-        RotateCharacter(input);
-        MoveCharacter(input);
+       // RotateCharacter(input);
+       // MoveCharacter(input);
 
         //Jump
         if (jumpaction.phase == InputActionPhase.Performed && groundedPlayer)
@@ -79,30 +79,30 @@ public class PlayerMovement : MonoBehaviour
     {
         // float targetRotation = 0;  //the variable is being treated as a constant or has a specific value type
 
-        if (input.x > 0)
+      /*  if (input.x > 0)
         {
             targetRotation = 90f;
         }
         else if (input.x < 0)
         {
             targetRotation = -90f;
-        }
+        }*/
 
         // Calculate the desired rotation angle based on input
-       // float angle = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg; // Convert to degrees
+        float angle = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg; // Convert to degrees
 
         // Smoothly rotate to the target rotation
-        Quaternion targetRotationQuaternion = Quaternion.Euler(0, targetRotation, 0);
+        Quaternion targetRotationQuaternion = Quaternion.Euler(0, angle, 0);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotationQuaternion, rotationSpeed * Time.deltaTime);
     }
 
     private void MoveCharacter(Vector2 input)
     {
-       /* // Calculate movement in the direction the player is facing
-        Vector3 moveDirection = transform.forward * input.y; // Moving forward/backward based on forward vector
+        /* // Calculate movement in the direction the player is facing
+         Vector3 moveDirection = transform.forward * input.y; // Moving forward/backward based on forward vector
 
-        // Apply movement
-        controller.Move(moveDirection * Time.deltaTime * moveSpeed);*/
+         // Apply movement
+         controller.Move(moveDirection * Time.deltaTime * moveSpeed);*/
 
         if (input.magnitude > 0)
         {
