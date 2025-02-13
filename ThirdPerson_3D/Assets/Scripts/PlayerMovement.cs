@@ -6,19 +6,19 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     //Input actions
-    PlayerInput playerInput;   //component
     InputAction moveAction;
     InputAction jumpaction;
 
-    //Player
-    [SerializeField] CharacterController controller;  //component
-    Vector3 PlayerVelocity;
-    [SerializeField] bool groundedPlayer;
+    //Components
+    CharacterController controller;  
+    PlayerInput playerInput;   
 
     //Move
     [SerializeField] float moveSpeed = 5f;
 
     //Jump
+    Vector3 PlayerVelocity;
+    [SerializeField] bool groundedPlayer;
     [SerializeField] float jumpHeight = 2f;
     [SerializeField] float gravity = -9.81f;
 
@@ -65,31 +65,26 @@ public class PlayerMovement : MonoBehaviour
          controller.Move(move * Time.deltaTime * moveSpeed);
 
         // Smoothly rotate to the target rotation
-        Quaternion targetRotationQuaternion = Quaternion.Euler(0, CameraTransform.eulerAngles.y, 0);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotationQuaternion, CamRotationSpeed * Time.deltaTime);
+       /* Quaternion targetRotationQuaternion = Quaternion.Euler(0, CameraTransform.eulerAngles.y, 0);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotationQuaternion, CamRotationSpeed * Time.deltaTime);*/
 
-        // RotateCharacter(input);
+
+         //RotateCharacter(input);
         // MoveCharacter(input);
 
-        //Jump
-        if (jumpaction.phase == InputActionPhase.Performed && groundedPlayer)
+        // Rotate character based on movement direction (if moving)
+        if (input.magnitude > 0.1f)
         {
-            PlayerVelocity.y += Mathf.Sqrt(jumpHeight * -2.0f * gravity);  // kinematic equation ,u = sqrt of -2as [a-acceleration, s-jumpheight]
+            RotateCharacter(move);
         }
 
-        // Apply gravity
-       /* if (!groundedPlayer)
-        {
-            PlayerVelocity.y += gravity * Time.deltaTime;
-        }*/
-
-        PlayerVelocity.y += gravity * Time.deltaTime;
-        controller.Move(PlayerVelocity * Time.deltaTime);
+       
+            
 
 
     }
 
-    private void RotateCharacter(Vector2 input)
+    private void RotateCharacter(Vector3 input)
     {
         // float targetRotation = 0;  //the variable is being treated as a constant or has a specific value type
 
@@ -102,12 +97,18 @@ public class PlayerMovement : MonoBehaviour
             targetRotation = -90f;
         }*/
 
-        // Calculate the desired rotation angle based on input
+       /* // Calculate the desired rotation angle based on input
         float angle = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg; // Convert to degrees
 
         // Smoothly rotate to the target rotation
         Quaternion targetRotationQuaternion = Quaternion.Euler(0, angle, 0);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotationQuaternion, rotationSpeed * Time.deltaTime);
+*/
+        if (input.magnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(input);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
     }
 
     private void MoveCharacter(Vector2 input)
@@ -131,6 +132,8 @@ public class PlayerMovement : MonoBehaviour
             // If there's no input, stop moving
             controller.Move(Vector3.zero);
         }
+
+
     }
 
 }
