@@ -78,7 +78,14 @@ public class PlayerMovement : MonoBehaviour
             RotateCharacter(move);
         }
 
-       
+       if(jumpaction.phase == InputActionPhase.Performed && groundedPlayer)
+        {
+            PlayerVelocity.y += Mathf.Sqrt(-2 * gravity * jumpHeight); // kinematic equation ,u = sqrt of -2as [a-acceleration, s-jumpheight, u-initial velocity, v - final velocity]
+
+        }
+
+        PlayerVelocity.y += gravity * Time.deltaTime;
+        controller.Move(PlayerVelocity * Time.deltaTime);
             
 
 
