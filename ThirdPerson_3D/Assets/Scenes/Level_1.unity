@@ -759,8 +759,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aef0511422a0a784391f6c0aff5225c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundedPlayer: 0
   moveSpeed: 5
+  groundedPlayer: 0
   jumpHeight: 2
   gravity: -9.81
   rotationSpeed: 500
