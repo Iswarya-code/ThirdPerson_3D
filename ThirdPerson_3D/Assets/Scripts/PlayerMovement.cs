@@ -49,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
         cameraTransform = Camera.main.transform; // Get the main camera
 
+        animator.SetFloat("Speed", 0f); // Ensure Idle animation on start
 
         // Cursor.lockState = CursorLockMode.Locked; // Lock cursor for FPS-style control
 
@@ -75,44 +76,40 @@ public class PlayerMovement : MonoBehaviour
 
     private void Char_Movement()
     {
-       
+
             Vector2 input = moveAction.ReadValue<Vector2>();
             Vector3 move = new Vector3(input.x, 0, input.y);
 
-        //Determine if running or walking
-        currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+            // Determine if running or walking
+            bool isRunning = Input.GetKey(KeyCode.LeftShift);
+            currentSpeed = isRunning ? runSpeed : walkSpeed;
 
-            controller.Move(move * moveSpeed * Time.deltaTime);
 
-            // Rotate player only if moving
             if (input.magnitude > 0.1f)
             {
-            // RotateCharacter(move);
-            // Get camera forward and right directions
-            Vector3 camForward = cameraTransform.forward;
-            Vector3 camRight = cameraTransform.right;
+                Vector3 camForward = cameraTransform.forward;
+                Vector3 camRight = cameraTransform.right;
 
-            camForward.y = 0; // Remove vertical component
-            camRight.y = 0;
-            camForward.Normalize();
-            camRight.Normalize();
+                camForward.y = 0;
+                camRight.y = 0;
+                camForward.Normalize();
+                camRight.Normalize();
 
-            // Move relative to the camera direction
-            Vector3 moveDirection = (camForward * move.z + camRight * move.x).normalized;
-            controller.Move(moveDirection * currentSpeed * Time.deltaTime);
+                Vector3 moveDirection = (camForward * move.z + camRight * move.x).normalized;
+                controller.Move(moveDirection * currentSpeed * Time.deltaTime);
 
-            // Rotate player to face movement direction
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
+                // Rotate player to face movement direction
+                Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            }
 
-        // Smooth transition for speed parameter
-        float smoothSpeed = Mathf.Lerp(animator.GetFloat("Speed"), input.magnitude * (currentSpeed / runSpeed), Time.deltaTime * 30f);
-        animator.SetFloat("Speed", smoothSpeed);
-
-
-
+        // Convert speed to Animator range (0 to 1)
+        float normalizedSpeed = (input.magnitude > 0.1f) ? (currentSpeed / runSpeed) : 0f;
+        animator.SetFloat("Speed", normalizedSpeed);
     }
+
+
+    
 
     private void RotateCharacter(Vector3 input)
     {
