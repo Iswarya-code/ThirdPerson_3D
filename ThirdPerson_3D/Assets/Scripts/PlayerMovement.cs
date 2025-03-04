@@ -23,11 +23,15 @@ public class PlayerMovement : MonoBehaviour
     private float currentSpeed;
 
 
-    //Jump
+    //Jump & gravity
     Vector3 PlayerVelocity;
     [SerializeField] bool groundedPlayer;
     [SerializeField] float jumpHeight = 2f;
     [SerializeField] float gravity = -9.81f; //float gravity = -15f; // Stronger gravity for a faster, snappier jump
+
+    [SerializeField] float groundCheckRadius = 0.2f;
+    [SerializeField] Transform groundCheck;
+    [SerializeField] LayerMask groundMask;
 
     //Rotation
     [SerializeField] float rotationSpeed = 200f;
@@ -53,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Cursor.lockState = CursorLockMode.Locked; // Lock cursor for FPS-style control
 
+        animator.SetFloat("Speed", 0f); // Ensure Idle animation on start
 
     }
 
@@ -61,11 +66,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        groundedPlayer = controller.isGrounded;
+        groundedPlayer = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
 
         if (groundedPlayer && PlayerVelocity.y < 0)
         {
-            PlayerVelocity.y = 0f;
+            PlayerVelocity.y = -2f;  // Keeps the player firmly on the ground
         }
 
         Char_Movement();
@@ -77,8 +82,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-
-
+   
     private void Char_Movement()
     {
 

@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 344336454}
   - component: {fileID: 344336453}
   - component: {fileID: 344336452}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1084,13 +1084,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2
+  m_Height: 1.8
   m_Radius: 0.2
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.94, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1205234571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1109,6 +1109,11 @@ MonoBehaviour:
   groundedPlayer: 0
   jumpHeight: 3
   gravity: -15
+  groundCheckRadius: 0.2
+  groundCheck: {fileID: 344336455}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
   rotationSpeed: 20
 --- !u!4 &1205234573 stripped
 Transform:
