@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 PlayerVelocity;
     [SerializeField] bool groundedPlayer;
     [SerializeField] float jumpHeight = 2f;
-    [SerializeField] float gravity = -9.81f;
+    [SerializeField] float gravity = -9.81f; //float gravity = -15f; // Stronger gravity for a faster, snappier jump
 
     //Rotation
     [SerializeField] float rotationSpeed = 200f;
@@ -70,9 +70,14 @@ public class PlayerMovement : MonoBehaviour
 
         Char_Movement();
         Char_Jump();
-       
+        if (jumpaction.triggered)
+        {
+            Debug.Log("Jump Button Pressed!"); // Check if jump is triggered
+        }
 
     }
+
+
 
     private void Char_Movement()
     {
@@ -109,25 +114,21 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    
-
-    private void RotateCharacter(Vector3 input)
-    {
-        if (input.magnitude > 0.1f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(input);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
-    }
-
     private void Char_Jump()
     {
 
-        if (jumpaction.phase == InputActionPhase.Performed && groundedPlayer)
+        if (groundedPlayer) // Ensure grounded check
         {
-            PlayerVelocity.y += Mathf.Sqrt(-2 * gravity * jumpHeight);
+            animator.SetBool("IsJumping", false); // Reset animation when on ground
+            if (jumpaction.phase == InputActionPhase.Performed) // phase for continuous jump
+            {
+                Debug.Log("Jump Pressed!"); // Debugging jump press
+                PlayerVelocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                animator.SetBool("IsJumping", true); // Start jump animation
+            }
         }
 
+        // Apply gravity continuously
         PlayerVelocity.y += gravity * Time.deltaTime;
         controller.Move(PlayerVelocity * Time.deltaTime);
     }
